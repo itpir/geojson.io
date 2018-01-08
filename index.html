@@ -149,7 +149,7 @@
         type: 'POST',
         data: JSON.stringify({"bounds": [sw,ne,nw,se]}),
         contentType: 'application/json',
-        url: post_url + '/search',
+        url: 'http://128.239.111.60:3000/search',
         success: function(data) {
           for(var x=0;x<data.length;x++){
             var i = document.createElement('div');
@@ -176,7 +176,7 @@
                   type: 'POST',
                   data: JSON.stringify({"gist": uri}),
                   contentType: 'application/json',
-                  url: post_url + '/gist',
+                  url: 'http://128.239.111.60:3000/gist',
                   success: function(data) {
 
                     window.api.data.set({map: data});
