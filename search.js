@@ -39,7 +39,7 @@ function getFeatures(sw, ne, nw, se){
   var view = [sw,ne,nw,se];
   // console.log(mongodb)
   // var MongoClient = require('mongodb').MongoClient
-  var url = "mongodb://128.239.20.76:27017/features"
+  var url = "mongodb://128.239.20.76:27017/asdf"
 
   // if withinBounds(,view){}
 }
