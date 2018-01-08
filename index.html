@@ -136,18 +136,18 @@
       var regExp = /\(([^)]+)\)/;
       var matches = regExp.exec(sw);
       var sw = matches[1].split(', ');
-      
+
       matches = regExp.exec(ne);
       var ne = matches[1].split(', ');
 
       var nw = [sw[0], ne[1]];
       var se = [ne[0], sw[1]];
-      
+
       $.ajax({
         type: 'POST',
         data: JSON.stringify({"bounds": [sw,ne,nw,se]}),
         contentType: 'application/json',
-        url: 'http://128.239.111.60:3000/search',
+        url: 'http://localhost:3000/search',
         success: function(data) {
           for(var x=0;x<data.length;x++){
             var i = document.createElement('div');
@@ -166,7 +166,7 @@
               i.appendChild(url);
 
               url.setAttribute('url', data[x].gist);
-              
+
               url.onclick = function(){
                 var uri = this.getAttribute('url');
 
@@ -174,9 +174,9 @@
                   type: 'POST',
                   data: JSON.stringify({"gist": uri}),
                   contentType: 'application/json',
-                  url: 'http://128.239.111.60:3000/gist',
+                  url: 'http://localhost:3000/gist',
                   success: function(data) {
-                    
+
                     window.api.data.set({map: data});
 
                     var x1 = Infinity, y1 = Infinity, x2 = -1, y2 = -1;
@@ -193,7 +193,7 @@
                 });
               }
             }
-            
+
             i.style.textAlign = "center";
             document.body.getElementsByClassName("pane")[0].appendChild(i);
           }

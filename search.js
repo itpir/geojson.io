@@ -21,7 +21,7 @@ b.onclick = function(){
   var regExp = /\(([^)]+)\)/;
   var matches = regExp.exec(sw);
   var sw = matches[1].split(', ');
-  
+
   matches = regExp.exec(ne);
   var ne = matches[1].split(', ');
 
@@ -35,11 +35,11 @@ console.log(m)
 
 function getFeatures(sw, ne, nw, se){
   // Connect to MongoDB and get features within bounds
-  
+
   var view = [sw,ne,nw,se];
   // console.log(mongodb)
   // var MongoClient = require('mongodb').MongoClient
-  var url = "mongodb://localhost:27017/features"
+  var url = "mongodb://128.239.20.76:27017/features"
 
   // if withinBounds(,view){}
 }

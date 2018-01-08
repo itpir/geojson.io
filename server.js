@@ -6,16 +6,16 @@ var request = require("request")
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
-})); 
+}));
 
 var http = require("http");
 var https = require("https");
 
 app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', "*"); 
-    res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE'); 
-    res.header('Access-Control-Allow-Headers', 'Content-Type'); 
-    next(); 
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
 })
 
 app.post('/', function(req, res, next) {
@@ -33,7 +33,7 @@ app.post('/gist', function (req, res) {
     }, function (error, response, body) {
         if (!error && response.statusCode === 200) {
             console.log(body)
-            res.send(body); 
+            res.send(body);
         }
     })
 });
@@ -49,7 +49,7 @@ app.post('/search', function(req,res){
 });
 
 function cb(res){
-    
+
     if(features.length == 0){
         features.push('No features matched.')
     }
@@ -61,13 +61,13 @@ function cb(res){
 function getFeatures(view, _callback, res){
 
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/features";
+    var url = "mongodb://128.239.20.76:27017/features";
 
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        
+
         var results = [];
-        
+
         db.collection("f").find({}).toArray(function(err, result) {
             if (err) throw err;
 
@@ -91,7 +91,7 @@ function withinBounds(bounds1, bounds2){
         if( ( bounds1[i][0] < bounds2[0][0] || bounds1[i][1] < bounds2[0][1])
             || (bounds1[i][0] > bounds2[1][0] || bounds1[i][1] > bounds2[1][1])
             || (bounds1[i][0] < bounds2[2][0] || bounds1[i][1] > bounds2[2][1])
-            || (bounds1[i][0] > bounds2[3][0] || bounds1[i][1] < bounds2[3][1]) 
+            || (bounds1[i][0] > bounds2[3][0] || bounds1[i][1] < bounds2[3][1])
         ) return false;
     }
 
