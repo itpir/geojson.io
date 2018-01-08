@@ -143,11 +143,13 @@
       var nw = [sw[0], ne[1]];
       var se = [ne[0], sw[1]];
 
+      var post_url = 'http://128.239.111.60:3000';
+
       $.ajax({
         type: 'POST',
         data: JSON.stringify({"bounds": [sw,ne,nw,se]}),
         contentType: 'application/json',
-        url: 'http://da.aiddata.wm.edu:3000/search',
+        url: post_url + '/search',
         success: function(data) {
           for(var x=0;x<data.length;x++){
             var i = document.createElement('div');
@@ -174,7 +176,7 @@
                   type: 'POST',
                   data: JSON.stringify({"gist": uri}),
                   contentType: 'application/json',
-                  url: 'http://da.aiddata.wm.edu:3000/gist',
+                  url: post_url + '/gist',
                   success: function(data) {
 
                     window.api.data.set({map: data});

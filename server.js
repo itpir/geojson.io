@@ -61,14 +61,14 @@ function cb(res){
 function getFeatures(view, _callback, res){
 
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://128.239.20.76:27017/asdf";
+    var url = "mongodb://localhost:27017/features";
 
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
 
         var results = [];
 
-        db.collection("features").find({}).toArray(function(err, result) {
+        db.collection("f").find({}).toArray(function(err, result) {
             if (err) throw err;
 
             for(var i=0;i<result.length;i++){
