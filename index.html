@@ -147,7 +147,7 @@
         type: 'POST',
         data: JSON.stringify({"bounds": [sw,ne,nw,se]}),
         contentType: 'application/json',
-        url: 'http://localhost:3000/search',
+        url: 'http://da.aiddata.wm.edu:3000/search',
         success: function(data) {
           for(var x=0;x<data.length;x++){
             var i = document.createElement('div');
@@ -174,7 +174,7 @@
                   type: 'POST',
                   data: JSON.stringify({"gist": uri}),
                   contentType: 'application/json',
-                  url: 'http://localhost:3000/gist',
+                  url: 'http://da.aiddata.wm.edu:3000/gist',
                   success: function(data) {
 
                     window.api.data.set({map: data});
