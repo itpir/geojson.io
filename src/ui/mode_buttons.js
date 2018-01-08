@@ -1,6 +1,7 @@
 var table = require('../panel/table'),
     json = require('../panel/json'),
-    help = require('../panel/help');
+    help = require('../panel/help')
+    features = require('../panel/features');
 
 module.exports = function(context, pane) {
     return function(selection) {
@@ -19,9 +20,14 @@ module.exports = function(context, pane) {
             behavior: table
         }, {
             icon: 'question',
-            title: ' Help',
+            title: ' Features',
             alt: 'Help',
             behavior: help
+        }, {
+            icon: 'question',
+            title: ' Features',
+            alt: 'Features',
+            behavior: features
         }];
 
         var buttons = selection

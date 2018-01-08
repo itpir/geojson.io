@@ -4,7 +4,7 @@ CLEANCSS = node_modules/.bin/cleancss
 UGLIFY = node_modules/.bin/uglifyjs
 LIBS = $(shell find lib -type f -name '*.js')
 
-all: dist/site.js dist/site.mobile.js dist/delegate.js lib/mapbox.js/latest lib/mapbox.js/latest/mapbox.js
+all: dist/search.js dist/site.js dist/site.mobile.js dist/delegate.js lib/mapbox.js/latest lib/mapbox.js/latest/mapbox.js
 
 node_modules: package.json
 	npm install
@@ -55,6 +55,9 @@ dist/lib.js: dist dist/d3.js $(LIBS)
 
 dist/delegate.js: src/delegate.js
 	$(BROWSERIFY)  src/delegate.js > dist/delegate.js
+
+dist/search.js: src/search.js
+	$(BROWSERIFY) src/search.js > dist/search.js
 
 lib/mapbox.js/latest:
 	mkdir -p lib/mapbox.js/latest

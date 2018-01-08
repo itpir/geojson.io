@@ -62,48 +62,144 @@
       ;
   ">
   <script>
-  if (/a\.tiles\.mapbox\.com/.test(L.mapbox.config.HTTP_URL)) {
-    Raven.config('https://c2d096c944dd4150ab7e44b0881b4a46@app.getsentry.com/11480', {
-      whitelistUrls: [/geojson\.io/],
-      ignoreErrors: [
-          'Uncaught Error: Error connecting to extension ckibcdccnfeookdmbahgiakhnjcddpki',
-          'Uncaught Error: Error connecting to extension pioclpoplcdbaefihamjohnefbikjilc'
-      ]
-    }).install();
-  }
+    if (/a\.tiles\.mapbox\.com/.test(L.mapbox.config.HTTP_URL)) {
+      Raven.config('https://c2d096c944dd4150ab7e44b0881b4a46@app.getsentry.com/11480', {
+        whitelistUrls: [/geojson\.io/],
+        ignoreErrors: [
+            'Uncaught Error: Error connecting to extension ckibcdccnfeookdmbahgiakhnjcddpki',
+            'Uncaught Error: Error connecting to extension pioclpoplcdbaefihamjohnefbikjilc'
+        ]
+      }).install();
+    }
   </script>
   <style>
-  /*
-   * http://seclab.stanford.edu/websec/framebusting/framebust.pdf
-   */
-  body { display: none; }
+    /*
+    * http://seclab.stanford.edu/websec/framebusting/framebust.pdf
+    */
+    body { display: none; }
   </style>
 </head>
 <body id='geojsonio-body'>
+  <div style="width: 500px; height: 500px; color: red;"></div>
+  <div class='geojsonio'></div>
 
-<div class='geojsonio'></div>
+  <script>
+    if (self == top) {
+      document.getElementsByTagName ("body")[0].style.display = 'block';
+    } else {
+      top.location = self.location;
+    }
+  </script>
+  <script src='dist/delegate.js'></script>
+  <script src='dist/lib.js'></script>
+  <script src='dist/site.js'></script>
+  <script src="lib/jquery-1.10.2.min.js"></script>
+  <script>
 
-<script>
-if (self == top) {
-  document.getElementsByTagName ("body")[0].style.display = 'block';
-} else {
-  top.location = self.location;
-}
-</script>
-<script src='dist/delegate.js'></script>
-<script src='dist/lib.js'></script>
-<script src='dist/site.js'></script>
-<script type='text/javascript'>
-if (/a\.tiles\.mapbox\.com/.test(L.mapbox.config.HTTP_URL)) {
-  var _gauges = _gauges || [];
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  </script>
+  <script type='text/javascript'>
+    if (/a\.tiles\.mapbox\.com/.test(L.mapbox.config.HTTP_URL)) {
+      var _gauges = _gauges || [];
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-12158002-18', 'auto');
-  ga('send', 'pageview');
-}
-</script>
+      ga('create', 'UA-12158002-18', 'auto');
+      ga('send', 'pageview');
+    }
+
+    var b = document.createElement("BUTTON");
+    b.innerHTML = 'Search';
+    b.style.zIndex = "1000";
+    b.style.position = "relative";
+    b.style.background = "green";
+    b.style.color = "white";
+    b.style.opacity = ".8";
+    b.style.marginRight = "10px";
+    b.style.marginLeft = "10px";
+    b.style.borderRadius = "5px";
+    b.style.width = "150px";
+    b.style.height = "39px";
+    b.style.marginTop = "2px";
+    document.body.getElementsByClassName("file-bar")[0].appendChild(b);
+
+    b.onclick = function(){
+
+      $("select[title='Help']").click();
+      var node = document.querySelector('[title="Help"]');
+      $(node).click();
+      var bounds = window.api.map.getBounds();
+      var sw = 'South West: ' + bounds._southWest
+      var ne = '\nNorth East: ' + bounds._northEast
+
+      var regExp = /\(([^)]+)\)/;
+      var matches = regExp.exec(sw);
+      var sw = matches[1].split(', ');
+      
+      matches = regExp.exec(ne);
+      var ne = matches[1].split(', ');
+
+      var nw = [sw[0], ne[1]];
+      var se = [ne[0], sw[1]];
+      
+      $.ajax({
+        type: 'POST',
+        data: JSON.stringify({"bounds": [sw,ne,nw,se]}),
+        contentType: 'application/json',
+        url: 'http://128.239.111.60:3000/search',
+        success: function(data) {
+          for(var x=0;x<data.length;x++){
+            var i = document.createElement('div');
+
+            if(typeof data[x] === 'string'){
+              i.innerHTML = data[x];
+            }
+            else{
+              i.innerHTML = data[x].name;
+              var url = document.createElement('BUTTON');
+              url.innerHTML = 'Go'
+              url.style.width = "150px";
+              url.style.height = "39px";
+              url.style.background = "green";
+              url.style.color = "white";
+              i.appendChild(url);
+
+              url.setAttribute('url', data[x].gist);
+              
+              url.onclick = function(){
+                var uri = this.getAttribute('url');
+
+                $.ajax({
+                  type: 'POST',
+                  data: JSON.stringify({"gist": uri}),
+                  contentType: 'application/json',
+                  url: 'http://128.239.111.60:3000/gist',
+                  success: function(data) {
+                    
+                    window.api.data.set({map: data});
+
+                    var x1 = Infinity, y1 = Infinity, x2 = -1, y2 = -1;
+                    for(var i=0;i<data.features[0].geometry.coordinates[0].length;i++){
+                      if(data.features[0].geometry.coordinates[0][i][0] < x1) x1 = data.features[0].geometry.coordinates[0][i][0];
+                      if(data.features[0].geometry.coordinates[0][i][1] < y1) y1 = data.features[0].geometry.coordinates[0][i][1];
+                      if(data.features[0].geometry.coordinates[0][i][0] > x2) x2 = data.features[0].geometry.coordinates[0][i][0];
+                      if(data.features[0].geometry.coordinates[0][i][1] > y2) y2 = data.features[0].geometry.coordinates[0][i][1];
+                    }
+
+                    var centerpoint = [y1+((y2-y1)/2),x1+((x2-x1)/2)];
+                    window.api.map.setView(centerpoint, 5);
+                  }
+                });
+              }
+            }
+            
+            i.style.textAlign = "center";
+            document.body.getElementsByClassName("pane")[0].appendChild(i);
+          }
+        }
+      });
+    }
+  </script>
 </body>
 </html>
